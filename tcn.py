@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 def tcn_layer(input, num_layers):
     '''
-    this implmentation is able to deal with any dimensionof inputs, as long as it's in
+    this implmentation is able to deal with any dimension of inputs, as long as it's in
     [N, spatial features, C] format
 
     :param input: should be a seq tensor [N,length,data]
@@ -52,19 +52,20 @@ def tcn_block(conv_output,input,use_conv=False):
         input=tf.nn.convolution(input,filter_variable,'SAME')
     return input+conv_output
 
+if __name__=='__main__':
 
-test_data=np.random.normal(1,1,(10,784,1))
-input=tf.constant(test_data,tf.float32)
+    test_data=np.random.normal(1,1,(10,784,1))
+    input=tf.constant(test_data,tf.float32)
 
-out=tcn_layer(input,2)
-out=tcn_block(out,input,use_conv=True)
-sess=tf.Session()
-init_op = tf.global_variables_initializer()
-init_l = tf.local_variables_initializer()
-print('initalize the variables')
-sess.run(init_op)
-sess.run(init_l)
-a=sess.run(out)
+    out=tcn_layer(input,2)
+    out=tcn_block(out,input,use_conv=True)
+    sess=tf.Session()
+    init_op = tf.global_variables_initializer()
+    init_l = tf.local_variables_initializer()
+    print('initalize the variables')
+    sess.run(init_op)
+    sess.run(init_l)
+    a=sess.run(out)
 
-pass
+    pass
 
