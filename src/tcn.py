@@ -9,12 +9,11 @@ def tcn_layer(input, num_layers):
     :param num_layers:number of tcn layers
     :return:
     '''
-    layer_num=0
     out_channels=[16]*num_layers
     output=input
     for layer_num in range(num_layers):
         spatial_shape=input.get_shape()[1:-1]
-        filter_shape=[2]+[1]*(len(spatial_shape)-1)
+        filter_shape=[3,*spatial_shape[1:]]
         input_channel=input.get_shape()[-1]
         out_channel=out_channels[layer_num]
         dilation_rate=1
@@ -54,18 +53,8 @@ def tcn_block(conv_output,input,use_conv=False):
 
 if __name__=='__main__':
 
-    test_data=np.random.normal(1,1,(10,784,1))
-    input=tf.constant(test_data,tf.float32)
 
-    out=tcn_layer(input,2)
-    out=tcn_block(out,input,use_conv=True)
-    sess=tf.Session()
-    init_op = tf.global_variables_initializer()
-    init_l = tf.local_variables_initializer()
-    print('initalize the variables')
-    sess.run(init_op)
-    sess.run(init_l)
-    a=sess.run(out)
+
 
     pass
 
