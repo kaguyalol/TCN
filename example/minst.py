@@ -49,7 +49,7 @@ for j in range(1,100000):
     temp = sess.run([train, loss, acc, sparse_output, label], feed_dict={inputplhd: data, labelplhd: tlabel})
     if not i%100:
         print(temp[1:3])
-print(j)
 #test:
+
 
 pass
