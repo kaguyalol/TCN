@@ -1,0 +1,37 @@
+# TCN
+
+Implementation of Temporal Convolutional Network Based on Tensorflow
+
+Can be used for any higher dimensional datasets, rather than only the one dimension seqence described in the original implementation
+
+The paper is available here: https://arxiv.org/abs/1803.01271
+
+TO use: can be used as a block of model in any tf model
+
+TODO: update the code config into a tf.keras interface. 
+
+
+Created  minimum examples of how to use the model
+
+TCN is a model that analyzes sequence data by stacking dialated convolutions
+
+
+
+Analysis of a sequence requires the convolution do not use information after that certain data point, which is slightly different from the default mechanism implemented in tensorflow, so we played a trick to achieve the result: we padded the sequence along the sequence dimension to shift the sequence right and convolve the sequence from the beginning of the padding.
+The number of zeros padded at the left of the sequence (for data of rank 1) is defined as dilation rate * (filter length -1)
+it can be generalized to data of rank n by : dliation rate * (filter shape along the sequence axis -1)
+Note: the shape of filter(a.k.a convolution kernel) has shape [l], where l is the length of the filter 
+and has shape [l]+[shape of data except the sequence axis] for data has rank n 
+The dilation rate for the first layer is 1, and for the k th layer, the dliation rate is 2^(k-1).
+by using a dliation rate greater than 1, the model gains a reception field of size 2^k, where k is the number of convolutions stacked.
+which also makes it powerful to deal with larger sequences.
+
+
+ 
+
+
+
+
+
+
+
