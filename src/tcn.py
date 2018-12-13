@@ -4,37 +4,38 @@ def tcn_layer(input, num_layers,**params):
     '''
     this implmentation is able to deal with any dimension of inputs, as long as it's in
     [N, spatial features, C] format
-
     :param input: should be a seq tensor [N,length,data]
     :param num_layers:number of tcn layers
     :param params:number of tcn layers,valid inputs are:
             out_channels
     :return:
     '''
-    seq_len = input.get_shape()[1]
+    #seq_len = input.get_shape()[1]
     out_channels=params.get('num_filters',[8]*num_layers)
-    filter_size=params.get('filter_size',max(int(seq_len)//10,2))
-
+    filter_size=params.get('filter_size',2)
+    base_dilation_rate=2
+    dilation_rate=1
     output=input
+    spatial_shape = input.get_shape()[1:-1]
+    filter_shape = [filter_size]+[1]*(len(spatial_shape)-1)
     for layer_num in range(num_layers):
-        spatial_shape=input.get_shape()[1:-1]
-        filter_shape=[filter_size,*spatial_shape[1:]]
+
         input_channel=input.get_shape()[-1]
         out_channel=out_channels[layer_num]
-        dilation_rate=1
+        dilation_rate*=base_dilation_rate
 
         filter_variable=tf.get_variable('tcn_layer'+str(layer_num),filter_shape+[input_channel,out_channel],
                         tf.float32, tf.random_normal_initializer(0, 0.01),
                                     trainable=True)
         # should only pad with the seq dimension
-        left_pad = dilation_rate * (filter_shape[0] - 1)
+        left_pad = (dilation_rate) * (filter_shape[0] - 1)
         # padding_pattern dim:[len([batch, seq_len,other_sample_dim, channels]),2]
         padding_pattern=[[0,0],[left_pad,0],*[[0,0]]*len(spatial_shape)]
         input=tf.pad(input,padding_pattern)
+        #print(dilation_rate)
         output=tf.nn.convolution(input,filter_variable,'VALID',dilation_rate=[dilation_rate]+[1]*(len(spatial_shape)-1))
         output=tf.layers.batch_normalization(output,axis=-1, training=True)
         output=tf.nn.relu(output)
-        output=tf.layers.Dropout()(output)
         input=output
 
     return output
@@ -56,9 +57,5 @@ def tcn_block(conv_output,input,use_conv=False):
     return input+conv_output
 
 if __name__=='__main__':
-
-
-
-
     pass
 

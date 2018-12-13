@@ -6,10 +6,11 @@ sys.path.append("../src")
 from tcn import *
 import numpy as np
 import tensorflow as tf
-test_data = np.random.normal(1, 2, (10, 32, 2, 1)) * np.random.rand(10, 32, 2, 1)
+f=lambda : np.random.normal(1, 2, (10, 784, 2, 1)) * np.random.rand(10, 784, 2, 1)
+test_data =f()
 # input=tf.constant(test_data,tf.float32)
 input = tf.placeholder(tf.float32, test_data.shape)
-out = tcn_layer(input, 2)
+out = tcn_layer(input, 4)
 out = tcn_block(out, input, use_conv=True)
 sess = tf.Session()
 
@@ -24,6 +25,6 @@ init_op = tf.global_variables_initializer()
 #init_l = tf.local_variables_initializer()
 sess.run(init_op)
 #sess.run(init_l)
-for i in range(100):
-    test_data = np.random.normal(1, 2, (10, 32, 2, 1)) * np.random.rand(10, 32, 2, 1)
+for i in range(1000):
+    test_data = f()
     print(sess.run([train, loss], feed_dict={input: test_data}))

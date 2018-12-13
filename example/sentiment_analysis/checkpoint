@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/zcf/Documents/Graduate/NLP/nlp_text_classifier/London_Rest_reviews/data/embedding_lookup"
+all_model_checkpoint_paths: "/home/zcf/Documents/Graduate/NLP/nlp_text_classifier/London_Rest_reviews/data/embedding_lookup"

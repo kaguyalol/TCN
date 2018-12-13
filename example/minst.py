@@ -11,10 +11,10 @@ minstdata=tf.keras.datasets.mnist.load_data('mnist.npz')
 inputplhd=tf.placeholder(tf.float32,shape=(None,28,28))
 labelplhd=tf.placeholder(tf.int32,shape=(None))
 sess = tf.Session()
-istcn='cnn'
+istcn='tcn'
 if istcn=='tcn':
     input=tf.reshape(inputplhd,[-1,784,1])
-    out = tcn_layer(input, 5,filter_size=64)
+    out = tcn_layer(input, 3,filter_size=10)
     out = tcn_block(out, input, use_conv=True)
 
     flatten = tf.layers.flatten(out)
@@ -39,7 +39,7 @@ init_op = tf.global_variables_initializer()
 init_l = tf.local_variables_initializer()
 sess.run(init_op)
 sess.run(init_l)
-bs=128
+bs=32
 lendata=len(minstdata[0][0])
 for j in range(1,100000):
     i=(j% int(lendata/bs))
